@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.sean.hibertest.entity.Country;
+import com.sean.hibertest.entity.CountryMany;
 import com.sean.hibertest.entity.CountryMask;
 
 public class CacheQueryDemo {
@@ -20,7 +21,8 @@ public class CacheQueryDemo {
 	public static void main(String[] args) {
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml").
-				addAnnotatedClass(Country.class).addAnnotatedClass(CountryMask.class).buildSessionFactory();
+				addAnnotatedClass(Country.class).addAnnotatedClass(CountryMask.class).
+				addAnnotatedClass(CountryMany.class).buildSessionFactory();
 
 		Session session = factory.getCurrentSession();
 		session.beginTransaction();
