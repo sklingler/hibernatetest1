@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false" monitoring="autodetect" dynamicConfig="true" name="ehCacheAdvertising">
+
+	<diskStore path="java.io.tmpdir/ehcache" />
+	<!-- The default caching information. Most configuration items. -->
+	<defaultCache maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="3600"
+		overflowToDisk="false" diskPersistent="false" timeToLiveSeconds="86400"
+		diskExpiryThreadIntervalSeconds="1800" memoryStoreEvictionPolicy="LRU"
+		statistics="true">
+	</defaultCache>
+
+<!-- Things like a customer, which we cache for search results on order search, for instance.
+100 orders to the same customer will reduce hits to the db when cached, but we need the cache
+duration to be short. -->
+	<cache name="nonConfigExpire" maxElementsInMemory="10000"
+		eternal="false" timeToIdleSeconds="5" overflowToDisk="false"
+		statistics="true">
+	</cache>
+
+	<!-- For short lived objects required during processing. For example - Deadline overrides,
+	and accounting periods. These are things that customer frequently changes behind the scenes on us,
+	We need the caching capability, but need to refresh for a core app changing them (until these become Beowulf
+	capable configuration items, then they can be like default above)  -->
+	<!-- Notice that we ONLY have timeToLiveSeconds, and it's relatively short -->
+	<cache name="configShortTerm" maxElementsInMemory="10000" eternal="false"
+		timeToLiveSeconds="180" overflowToDisk="true"
+		diskPersistent="true" memoryStoreEvictionPolicy="LRU" statistics="true">
+	</cache>
+
+    <!--  UNUSED -->
+	<!-- For short lived objects required during processing. For example - Search 
+		objects like Task, Opp, Order, Customer etc. -->
+	<cache name="tenMinuteExpiry" maxElementsInMemory="10000"
+		eternal="false" timeToIdleSeconds="600" overflowToDisk="false"
+		statistics="true">
+	</cache>
+
+</ehcache>
